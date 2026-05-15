@@ -112,28 +112,13 @@ if st.session_state.page == 2:
         st.checkbox(opt,key=k,on_change=handle,
                     args=(opt,k,st.session_state.breakfast,"Breakfast"))
 
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown(
-            """
-            <div style="display:flex; justify-content:center;">
-            """,
-            unsafe_allow_html=True
-        )
-        if st.button("⬅️ Back", key="back_3"):
-            st.session_state.page = 2
-        st.markdown("</div>", unsafe_allow_html=True)
-    with col2:
-        st.markdown(
-            """
-            <div style="display:flex; justify-content:center;">
-            """,
-            unsafe_allow_html=True
-        )
-        if st.button("Next ➡️", key="next_3"):
-            st.session_state.page = 4
-        st.markdown("</div>", unsafe_allow_html=True)
-
+    col1,col2=st.columns(2)
+    if col1.button("⬅️ Back",key="back_2"): st.session_state.page=1
+    if col2.button("Next ➡️",key="next_2"):
+        if len(st.session_state.breakfast)==2:
+            st.session_state.page=3
+        else:
+            st.error("Select 2")
 # =========================
 # PAGE 3 - LUNCH
 # =========================
@@ -579,26 +564,12 @@ if st.session_state.page == 3:
                     args=(opt,f"ac_{i}",st.session_state.accomp,"Accompaniments"))
 
     col1, col2 = st.columns(2)
+
     with col1:
-        st.markdown(
-            """
-            <div style="display:flex; justify-content:center;">
-            """,
-            unsafe_allow_html=True
-        )
-        if st.button("⬅️ Back", key="back_3"):
-            st.session_state.page = 2
-        st.markdown("</div>", unsafe_allow_html=True)
+      if st.button("⬅️ Back",key="back_3"):st.session_state.page = 2
+
     with col2:
-        st.markdown(
-            """
-            <div style="display:flex; justify-content:center;">
-            """,
-            unsafe_allow_html=True
-        )
-        if st.button("Next ➡️", key="next_3"):
-            st.session_state.page = 4
-        st.markdown("</div>", unsafe_allow_html=True)
+      if st.button("Next ➡️",key="next_3"):st.session_state.page = 4
 
 # =========================
 # PAGE 4 - DESSERTS
@@ -637,27 +608,10 @@ if st.session_state.page == 4:
         st.checkbox(opt,key=f"des_{i}",on_change=handle,
                     args=(opt,f"des_{i}",st.session_state.desserts,"Desserts"))
 
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown(
-            """
-            <div style="display:flex; justify-content:center;">
-            """,
-            unsafe_allow_html=True
-        )
-        if st.button("⬅️ Back", key="back_3"):
-            st.session_state.page = 2
-        st.markdown("</div>", unsafe_allow_html=True)
-    with col2:
-        st.markdown(
-            """
-            <div style="display:flex; justify-content:center;">
-            """,
-            unsafe_allow_html=True
-        )
-        if st.button("Next ➡️", key="next_3"):
-            st.session_state.page = 4
-        st.markdown("</div>", unsafe_allow_html=True)
+    col1,col2=st.columns(2)
+    if col1.button("⬅️ Back",key="back_4"): st.session_state.page=3
+    if col2.button("Next ➡️",key="next_4"): st.session_state.page=5
+
         
 # =========================
 # ✅ PAGE 5 - SUMMARY
