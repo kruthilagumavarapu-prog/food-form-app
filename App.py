@@ -112,7 +112,7 @@ if st.session_state.page == 2:
         st.checkbox(opt,key=k,on_change=handle,
                     args=(opt,k,st.session_state.breakfast,"Breakfast"))
 
-    col1,col2=st.columns([1,1],gap="small")
+    col1,col2=st.columns(2)
     if col1.button("⬅️ Back",key="back_2"): st.session_state.page=1
     if col2.button("Next ➡️",key="next_2"):
         if len(st.session_state.breakfast)==2:
@@ -565,7 +565,7 @@ if st.session_state.page == 3:
                     on_change=handle,
                     args=(opt,f"ac_{i}",st.session_state.accomp,"Accompaniments"))
 
-    col1, col2 = st.columns([1,1],gap="small")
+    col1, col2 = st.columns(2)
 
     with col1:
       if st.button("⬅️ Back",key="back_3"):st.session_state.page = 2
@@ -611,7 +611,7 @@ if st.session_state.page == 4:
         st.checkbox(opt,key=f"des_{i}",on_change=handle,
                     args=(opt,f"des_{i}",st.session_state.desserts,"Desserts"))
 
-    col1,col2=st.columns([1,1],gap="small")
+    col1,col2=st.columns(2)
     if col1.button("⬅️ Back",key="back_4"): st.session_state.page=3
     if col2.button("Next ➡️",key="next_4"): st.session_state.page=5
 
@@ -683,7 +683,7 @@ if st.session_state.page == 5:
 
 
     # ✅ Buttons
-    col1, col2 = st.columns([1,1],gap="small")
+    col1, col2 = st.columns(2)
 
     with col1:
         if st.button("⬅️ Back",key="back_5"):
