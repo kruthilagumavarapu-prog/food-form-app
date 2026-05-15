@@ -112,9 +112,9 @@ if st.session_state.page == 2:
         st.checkbox(opt,key=k,on_change=handle,
                     args=(opt,k,st.session_state.breakfast,"Breakfast"))
 
-    col1,col2=st.columns(2)
-    if col1.button("⬅️ Back",key="back_2", use_container_width=True): st.session_state.page=1
-    if col2.button("Next ➡️",key="next_2", use_container_width=True):
+    col1,col2=st.columns([1,1],gap="small")
+    if col1.button("⬅️ Back",key="back_2"): st.session_state.page=1
+    if col2.button("Next ➡️",key="next_2"):
         if len(st.session_state.breakfast)==2:
             st.session_state.page=3
         else:
@@ -565,13 +565,13 @@ if st.session_state.page == 3:
                     on_change=handle,
                     args=(opt,f"ac_{i}",st.session_state.accomp,"Accompaniments"))
 
-    col1, col2 = st.columns([1, 1])
+    col1, col2 = st.columns([1,1],gap="small")
 
     with col1:
-      if st.button("⬅️ Back",key="back_3", use_container_width=True):st.session_state.page = 2
+      if st.button("⬅️ Back",key="back_3"):st.session_state.page = 2
 
     with col2:
-      if st.button("Next ➡️",key="next_3", use_container_width=True):st.session_state.page = 4
+      if st.button("Next ➡️",key="next_3"):st.session_state.page = 4
 
 
 # =========================
@@ -611,9 +611,9 @@ if st.session_state.page == 4:
         st.checkbox(opt,key=f"des_{i}",on_change=handle,
                     args=(opt,f"des_{i}",st.session_state.desserts,"Desserts"))
 
-    col1,col2=st.columns(2)
-    if col1.button("⬅️ Back",key="back_4", use_container_width=True): st.session_state.page=3
-    if col2.button("Next ➡️",key="next_4", use_container_width=True): st.session_state.page=5
+    col1,col2=st.columns([1,1],gap="small")
+    if col1.button("⬅️ Back",key="back_4"): st.session_state.page=3
+    if col2.button("Next ➡️",key="next_4"): st.session_state.page=5
 
         
 # =========================
@@ -683,13 +683,13 @@ if st.session_state.page == 5:
 
 
     # ✅ Buttons
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns([1,1],gap="small")
 
     with col1:
-        if st.button("⬅️ Back",key="back_5", use_container_width=True):
+        if st.button("⬅️ Back",key="back_5"):
             st.session_state.page = 4
 
     with col2:
-        if st.button("✅ Submit",key="conform_5" ,use_container_width=True):
+        if st.button("✅ Submit",key="conform_5" ):
             st.success("✅ Form Submitted Successfully!")
             st.session_state.page = 1
