@@ -5,7 +5,8 @@ import pandas as pd
 import os
 
 st.set_page_config(page_title="Food Form")
-
+params = st.query_params
+mode = params.get("mode", "qr")
 
 # =========================
 # SESSION INIT
@@ -77,17 +78,30 @@ def handle(option, key, store, label):
 # =========================
 # PAGE 1
 # =========================
+# =========================
+# PAGE 1 (QR OR FORM)
+# =========================
+
+if mode == "qr":
+    st.title("📱 Scan QR Code to Access Food Form")
+
+    app_url = "https://food-form-app-c9zrpvuvv2uwlc9ma6cncx.streamlit.app/?mode=form"
+
+    qr = qrcode.make(app_url)
+    qr_image = qr.convert("RGB")
+
+    st.image(qr_image, width=250)
+    st.info("Scan this QR code to open the form")
+
+    st.stop()  # ✅ VERY IMPORTANT (stops rest of app)
+
+# ✅ FORM MODE (when opened via QR)
 if st.session_state.page == 1:
     st.title("👤 Employee Details")
-    app_url = "https://food-form-app-c9zrpvuvv2uwlc9ma6cncx.streamlit.app"
-    qr = qrcode.make(app_url)
-    qr_image = qr.convert("RGB")  # ✅ convert to proper image format
-    st.image(qr_image, caption="📱 Scan to open this form")
 
     name = st.text_input("Full Name")
     dept = st.text_input("Department")
-    email= st.text_input("Email")
-
+    email = st.text_input("Email")
 
     if st.button("Next ➡️"):
         if name and dept and email:
