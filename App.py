@@ -1,3 +1,4 @@
+import qrcode
 import streamlit as st
 import pandas as pd
 import os
@@ -52,14 +53,23 @@ def handle(option, key, store, label):
     }
 
     max_limit = limits[label]
-
+    if not isinstance(store, list):
+        store = []
     if st.session_state[key]:
         if option not in store:
             if len(store) < max_limit:
                 store.append(option)
+                st.session_state[key] = True
             else:
-                st.warning(f"⚠️ Only {max_limit} allowed in {label}")
-                st.session_state[key] = False
+                prefix = key.split("_")[0]
+                for k in st.session_state.keys():
+                   if k.startswith(prefix):
+                      st.session_state[k] = False
+                
+                store.clear()
+                store.append(option)
+                st.session_state[key] = True
+
     else:
         if option in store:
             store.remove(option)
@@ -68,6 +78,9 @@ def handle(option, key, store, label):
 # =========================
 if st.session_state.page == 1:
     st.title("👤 Employee Details")
+    app_url = "https://food-form-app-c9zrpvuvv2uwlc9ma6cncx.streamlit.app"
+    qr = qrcode.make(app_url)
+    st.image(qr, caption="📱 Scan to open this form")
 
     name = st.text_input("Full Name")
     dept = st.text_input("Department")
@@ -126,7 +139,7 @@ if st.session_state.page == 3:
     
     st.title("🍛 Lunch")
     
-    st.title("🥗 Starters")
+    st.subheader("🥗 Starters")
     
     veg_starters = [
     "Veg Manchurian",
@@ -139,12 +152,10 @@ if st.session_state.page == 3:
     "Ginger Veg",
     "Achari Aloo"
 ]
-    st.subheader("VEG")
+    st.markdown("#### **VEG**")
 
-    for i,opt in enumerate(veg_starters):
-        k=f"veg_{i}"
-        st.checkbox(opt,key=k,on_change=handle,
-                    args=(opt,k,st.session_state.veg,"VEG"))
+    veg_choice = st.radio("", veg_starters, key="veg_radio",index=None)
+    st.session_state.veg = [veg_choice]
 
     nonveg_starters = [
     "Chicken Spring Rolls",
@@ -161,12 +172,10 @@ if st.session_state.page == 3:
     "Chicken Momos",
     "Egg Pakoda"
 ]
-    st.subheader("NON-VEG")
+    st.markdown("#### **NON-VEG**")
     
-    for i,opt in enumerate(nonveg_starters):
-        k=f"nv_{i}"
-        st.checkbox(opt,key=k,on_change=handle,
-                    args=(opt,k,st.session_state.nonveg,"NON-VEG"))
+    nonveg_choice = st.radio("", nonveg_starters, key="nonveg_radio",index=None)
+    st.session_state.nonveg = [nonveg_choice]
 
     veg_gravy = [
     "Paneer Butter Masala",
@@ -305,9 +314,8 @@ if st.session_state.page == 3:
 ]
     st.subheader("🍲 Veg Gravy")
     
-    for i,opt in enumerate(veg_gravy):
-        st.checkbox(opt,key=f"vg_{i}",on_change=handle,
-                    args=(opt,f"vg_{i}",st.session_state.veg_gravy,"Veg Gravy"))
+    vg_choice = st.radio("", veg_gravy, key="vg_radio",index=None)
+    st.session_state.veg_gravy = [vg_choice]
 
     st.subheader("🍗 Non‑Veg Gravy")
     
@@ -341,9 +349,8 @@ if st.session_state.page == 3:
     "Chettinadu Chicken"
 ]
 
-    for i,opt in enumerate(nonveg_gravy):
-        st.checkbox(opt,key=f"nvg_{i}",on_change=handle,
-                    args=(opt,f"nvg_{i}",st.session_state.nonveg_gravy,"Non-Veg Gravy"))
+    nvg_choice = st.radio("", nonveg_gravy, key="nvg_radio",index=None)
+    st.session_state.nonveg_gravy = [nvg_choice]
 
     # ✅ VEG FRY (FULL)
     st.subheader("🔥 Veg Fry")
@@ -424,12 +431,9 @@ if st.session_state.page == 3:
     "Panasa Pottu Capsicum Fry"
 ]
 
-    for i,opt in enumerate(veg_fry):
-        st.checkbox(opt,key=f"vfry_{i}",on_change=handle,
-                    args=(opt,f"vfry_{i}",st.session_state.veg_fry,"Veg Fry"))
+    vf_choice = st.radio("", veg_fry, key="vf_radio",index=None)
+    st.session_state.veg_fry = [vf_choice]
 
-
-    
     st.title("🍚 Biryani")
     st.subheader("VEG")
     
@@ -443,10 +447,8 @@ if st.session_state.page == 3:
     "Paneer Dum Biryani",
     "Mushroom Dum Biryani"
 ]
-    for i,opt in enumerate(veg_biryani):
-        st.checkbox(opt,key=f"vbir_{i}",
-                    on_change=handle,
-                    args=(opt,f"vbir_{i}",st.session_state.veg_biryani,"Veg Biryani"))
+    vb_choice = st.radio("", veg_biryani, key="vb_radio",index=None)
+    st.session_state.veg_biryani = [vb_choice]
 
     st.subheader("🍗NON-VEG")
     
@@ -455,10 +457,8 @@ if st.session_state.page == 3:
     "Chicken Fry Biryani",
     "Egg Biryani"
 ]
-    for i,opt in enumerate(nonveg_biryani):
-        st.checkbox(opt,key=f"nvbir_{i}",
-                    on_change=handle,
-                    args=(opt,f"nvbir_{i}",st.session_state.nonveg_biryani,"Non-Veg Biryani"))
+    nvb_choice = st.radio("", nonveg_biryani, key="nvb_radio",index=None)
+    st.session_state.nonveg_biryani = [nvb_choice]
 
     st.title("🍛 Flavored Rice")
     st.subheader("VEG")
@@ -487,11 +487,9 @@ if st.session_state.page == 3:
     "Mango Pulihora",
     "Usirikaya Pulihora"
 ]
-    for i,opt in enumerate(veg_flavored):
-        st.checkbox(opt,key=f"vfr_{i}",
-                    on_change=handle,
-                    args=(opt,f"vfr_{i}",st.session_state.veg_flavored,"Veg Flavored"))
-
+    vfr_choice = st.radio("", veg_flavored, key="vfr_radio",index=None)
+    st.session_state.veg_flavored = [vfr_choice]
+                    
     st.subheader("NON-VEG")
     
     nonveg_flavored = [
@@ -502,10 +500,8 @@ if st.session_state.page == 3:
     "Chicken Fried Rice",
     "Mix Non Veg Fried Rice"
 ]
-    for i,opt in enumerate(nonveg_flavored):
-        st.checkbox(opt,key=f"nvfr_{i}",
-                    on_change=handle,
-                    args=(opt,f"nvfr_{i}",st.session_state.nonveg_flavored,"Non-Veg Flavored"))
+    nvfr_choice = st.radio("", nonveg_flavored, key="nvfr_radio",index=None)
+    st.session_state.nonveg_flavored = [nvfr_choice]
 
     st.subheader("🥄 Accompaniments")
     
@@ -558,10 +554,8 @@ if st.session_state.page == 3:
     "Bhoondi Raita",
     "Pineapple Raita"
 ]
-    for i,opt in enumerate(accomp):
-        st.checkbox(opt,key=f"ac_{i}",
-                    on_change=handle,
-                    args=(opt,f"ac_{i}",st.session_state.accomp,"Accompaniments"))
+    acc_choice = st.radio("", accomp, key="accomp_radio",index=None)
+    st.session_state.accomp = [acc_choice]
 
     col1, col2 = st.columns(2)
 
@@ -604,9 +598,8 @@ if st.session_state.page == 4:
     "Motichoor Laddu"
 ]
 
-    for i,opt in enumerate(desserts):
-        st.checkbox(opt,key=f"des_{i}",on_change=handle,
-                    args=(opt,f"des_{i}",st.session_state.desserts,"Desserts"))
+    dess_choice = st.radio("", desserts, key="dess_radio",index=None)
+    st.session_state.desserts = [dess_choice]
 
     col1,col2=st.columns(2)
     if col1.button("⬅️ Back",key="back_4"): st.session_state.page=3
