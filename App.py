@@ -1,4 +1,5 @@
 import qrcode
+from PIL import Image
 import streamlit as st
 import pandas as pd
 import os
@@ -80,7 +81,8 @@ if st.session_state.page == 1:
     st.title("👤 Employee Details")
     app_url = "https://food-form-app-c9zrpvuvv2uwlc9ma6cncx.streamlit.app"
     qr = qrcode.make(app_url)
-    st.image(qr, caption="📱 Scan to open this form")
+    qr_image = qr.convert("RGB")  # ✅ convert to proper image format
+    st.image(qr_image, caption="📱 Scan to open this form")
 
     name = st.text_input("Full Name")
     dept = st.text_input("Department")
