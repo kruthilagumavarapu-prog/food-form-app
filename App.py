@@ -3,6 +3,19 @@ from PIL import Image
 import streamlit as st
 import pandas as pd
 import os
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+# ✅ ADD FUNCTION HERE (after imports)
+def connect_sheet():
+    scope = [
+        "https://spreadsheets.google.com/feeds",
+        "https://www.googleapis.com/auth/drive",
+    ]   
+    creds_dict = st.secrets["gcp_service_account"]
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+    client = gspread.authorize(creds)
+    sheet = client.open("Food Form Responses").sheet1
+    return sheet
 
 st.set_page_config(page_title="Food Form")
 params = st.query_params
@@ -613,31 +626,24 @@ if st.session_state.page == 4:
     "Sweet Boondhi",
     "Motichoor Laddu"
 ]
-
     dess_choice = st.radio("", desserts, key="dess_radio",index=None)
     st.session_state.desserts = [dess_choice]
 
     col1,col2=st.columns(2)
     if col1.button("⬅️ Back",key="back_4"): st.session_state.page=3
     if col2.button("Next ➡️",key="next_4"): st.session_state.page=5
-
         
 # =========================
 # ✅ PAGE 5 - SUMMARY
 # =========================
-if st.session_state.page == 5:
-
-    
+if st.session_state.page == 5:   
 
     st.title("✅ Review Your Selections")
 
-    
     st.write("### 👤 Employee Details")
     st.write("Name:", st.session_state.name)
     st.write("Department:", st.session_state.dept)
     st.write("Email:", st.session_state.email)
-
-    
 
     st.write("### 🍽️ Breakfast")
     for item in st.session_state.breakfast:
@@ -694,8 +700,25 @@ if st.session_state.page == 5:
     with col1:
         if st.button("⬅️ Back",key="back_5"):
             st.session_state.page = 4
-
     with col2:
-        if st.button("✅ Submit",key="conform_5" ):
-            st.success("✅ Form Submitted Successfully!")
+        if st.button("✅ Submit", key="conform_5"):
+            sheet = connect_sheet()
+            sheet.append_row([
+                st.session_state.name,
+                st.session_state.dept,
+                st.session_state.email,
+                ", ".join(st.session_state.breakfast),
+                ", ".join(st.session_state.veg),
+                ", ".join(st.session_state.nonveg),
+                ", ".join(st.session_state.veg_gravy),
+                ", ".join(st.session_state.nonveg_gravy),
+                ", ".join(st.session_state.veg_fry),
+                ", ".join(st.session_state.veg_biryani),
+                ", ".join(st.session_state.nonveg_biryani),
+                ", ".join(st.session_state.veg_flavored),
+                ", ".join(st.session_state.nonveg_flavored),
+                ", ".join(st.session_state.accomp),
+                ", ".join(st.session_state.desserts),
+            ])
+            st.success("✅ Data saved to Google Sheet!")
             st.session_state.page = 1
