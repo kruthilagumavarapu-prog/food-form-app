@@ -118,10 +118,13 @@ if st.session_state.page == 1:
 
     if st.button("Next ➡️"):
         if name and dept and email:
-            st.session_state.name = name
-            st.session_state.dept = dept
-            st.session_state.email = email
-            st.session_state.page = 2
+            if "@" not in email or "." not in email:
+                st.error("❌ Incorrect email! Please enter a valid email (example: abc@gmail.com)")
+            else:
+                st.session_state.name = name
+                st.session_state.dept = dept
+                st.session_state.email = email
+                st.session_state.page = 2
         else:
             st.error("Fill all fields")
 
