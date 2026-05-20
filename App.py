@@ -14,7 +14,7 @@ def connect_sheet():
     creds_dict = st.secrets["gcp_service_account"]
     creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
     client = gspread.authorize(creds)
-    sheet = client.open("Food Form Responses").sheet1
+    sheet = client.open_by_key("1TMBHgkPi5O47N9WHU35LmgfoQNSrAYxsmDg573OPcV0").sheet1
     return sheet
 
 st.set_page_config(page_title="Food Form")
