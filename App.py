@@ -5,6 +5,7 @@ import pandas as pd
 import os
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+from datetime import datetime 
 # ✅ ADD FUNCTION HERE (after imports)
 def connect_sheet():
     scope = [
@@ -112,18 +113,20 @@ if mode == "qr":
 if st.session_state.page == 1:
     st.title("👤 Employee Details")
 
+    emp_id = st.text_input("Employee ID")
     name = st.text_input("Full Name")
     dept = st.text_input("Department")
     email = st.text_input("Email")
 
     if st.button("Next ➡️"):
-        if name and dept and email:
+        if name.strip() and emp_id.strip() and dept.strip() and email.strip():
             if "@" not in email or "." not in email:
                 st.error("❌ Incorrect email! Please enter a valid email (example: abc@gmail.com)")
             else:
                 st.session_state.name = name
                 st.session_state.dept = dept
                 st.session_state.email = email
+                st.session_state.emp_id = emp_id
                 st.session_state.page = 2
         else:
             st.error("Fill all fields")
@@ -187,7 +190,7 @@ if st.session_state.page == 3:
     st.markdown("#### **VEG**")
 
     veg_choice = st.radio("", veg_starters, key="veg_radio",index=None)
-    st.session_state.veg = [veg_choice]
+    st.session_state.veg = [veg_choice] if veg_choice else []
 
     nonveg_starters = [
     "Chicken Spring Rolls",
@@ -207,7 +210,7 @@ if st.session_state.page == 3:
     st.markdown("#### **NON-VEG**")
     
     nonveg_choice = st.radio("", nonveg_starters, key="nonveg_radio",index=None)
-    st.session_state.nonveg = [nonveg_choice]
+    st.session_state.nonveg = [nonveg_choice] if nonveg_choice else []
 
     veg_gravy = [
     "Paneer Butter Masala",
@@ -347,7 +350,7 @@ if st.session_state.page == 3:
     st.subheader("🍲 Veg Gravy")
     
     vg_choice = st.radio("", veg_gravy, key="vg_radio",index=None)
-    st.session_state.veg_gravy = [vg_choice]
+    st.session_state.veg_gravy = [vg_choice] if vg_choice else []
 
     st.subheader("🍗 Non‑Veg Gravy")
     
@@ -382,7 +385,7 @@ if st.session_state.page == 3:
 ]
 
     nvg_choice = st.radio("", nonveg_gravy, key="nvg_radio",index=None)
-    st.session_state.nonveg_gravy = [nvg_choice]
+    st.session_state.nonveg_gravy = [nvg_choice] if nvg_choice else []
 
     # ✅ VEG FRY (FULL)
     st.subheader("🔥 Veg Fry")
@@ -464,7 +467,7 @@ if st.session_state.page == 3:
 ]
 
     vf_choice = st.radio("", veg_fry, key="vf_radio",index=None)
-    st.session_state.veg_fry = [vf_choice]
+    st.session_state.veg_fry = [vf_choice] if vf_choice else []
 
     st.title("🍚 Biryani")
     st.subheader("VEG")
@@ -480,7 +483,7 @@ if st.session_state.page == 3:
     "Mushroom Dum Biryani"
 ]
     vb_choice = st.radio("", veg_biryani, key="vb_radio",index=None)
-    st.session_state.veg_biryani = [vb_choice]
+    st.session_state.veg_biryani = [vb_choice] if vb_choice else []
 
     st.subheader("🍗NON-VEG")
     
@@ -490,7 +493,7 @@ if st.session_state.page == 3:
     "Egg Biryani"
 ]
     nvb_choice = st.radio("", nonveg_biryani, key="nvb_radio",index=None)
-    st.session_state.nonveg_biryani = [nvb_choice]
+    st.session_state.nonveg_biryani = [nvb_choice] if nvb_choice else []
 
     st.title("🍛 Flavored Rice")
     st.subheader("VEG")
@@ -520,7 +523,7 @@ if st.session_state.page == 3:
     "Usirikaya Pulihora"
 ]
     vfr_choice = st.radio("", veg_flavored, key="vfr_radio",index=None)
-    st.session_state.veg_flavored = [vfr_choice]
+    st.session_state.veg_flavored = [vfr_choice] if vfr_choice else []
                     
     st.subheader("NON-VEG")
     
@@ -533,7 +536,7 @@ if st.session_state.page == 3:
     "Mix Non Veg Fried Rice"
 ]
     nvfr_choice = st.radio("", nonveg_flavored, key="nvfr_radio",index=None)
-    st.session_state.nonveg_flavored = [nvfr_choice]
+    st.session_state.nonveg_flavored = [nvfr_choice] if nvfr_choice else []
 
     st.subheader("🥄 Accompaniments")
     
@@ -587,7 +590,7 @@ if st.session_state.page == 3:
     "Pineapple Raita"
 ]
     acc_choice = st.radio("", accomp, key="accomp_radio",index=None)
-    st.session_state.accomp = [acc_choice]
+    st.session_state.accomp = [acc_choice] if acc_choice else []
 
     col1, col2 = st.columns(2)
 
@@ -630,7 +633,7 @@ if st.session_state.page == 4:
     "Motichoor Laddu"
 ]
     dess_choice = st.radio("", desserts, key="dess_radio",index=None)
-    st.session_state.desserts = [dess_choice]
+    st.session_state.desserts = [dess_choice] if dess_choice else []
 
     col1,col2=st.columns(2)
     if col1.button("⬅️ Back",key="back_4"): st.session_state.page=3
@@ -647,6 +650,7 @@ if st.session_state.page == 5:
     st.write("Name:", st.session_state.name)
     st.write("Department:", st.session_state.dept)
     st.write("Email:", st.session_state.email)
+    st.write("Employee ID:", st.session_state.emp_id)
 
     st.write("### 🍽️ Breakfast")
     for item in st.session_state.breakfast:
@@ -705,23 +709,46 @@ if st.session_state.page == 5:
             st.session_state.page = 4
     with col2:
         if st.button("✅ Submit", key="conform_5"):
-            sheet = connect_sheet()
-            sheet.append_row([
-                st.session_state.name,
-                st.session_state.dept,
-                st.session_state.email,
-                ", ".join(st.session_state.breakfast),
-                ", ".join(st.session_state.veg),
-                ", ".join(st.session_state.nonveg),
-                ", ".join(st.session_state.veg_gravy),
-                ", ".join(st.session_state.nonveg_gravy),
-                ", ".join(st.session_state.veg_fry),
-                ", ".join(st.session_state.veg_biryani),
-                ", ".join(st.session_state.nonveg_biryani),
-                ", ".join(st.session_state.veg_flavored),
-                ", ".join(st.session_state.nonveg_flavored),
-                ", ".join(st.session_state.accomp),
-                ", ".join(st.session_state.desserts),
-            ])
-            st.success("✅ Data saved to Google Sheet!")
-            st.session_state.page = 1
+            try:
+                sheet = connect_sheet()
+                timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                def safe_join(lst):
+                    try:
+                        if not lst:
+                            return "None"
+                        if not isinstance(lst, list):
+                            lst=[lst]
+                        cleaned=[]
+                        for i in lst:
+                            if i is not None and i !="":
+                                cleaned.append(str(i))
+                        return ",".join(cleaned) if cleaned else "None"
+                    except Exception:
+                        return "None"
+                data=[
+                    st.session_state.emp_id,
+                    st.session_state.name,
+                    st.session_state.dept,
+                    st.session_state.email,
+                    timestamp,
+                    safe_join(st.session_state.breakfast),
+                    safe_join(st.session_state.veg),
+                    safe_join(st.session_state.nonveg),
+                    safe_join(st.session_state.veg_gravy),
+                    safe_join(st.session_state.nonveg_gravy),
+                    safe_join(st.session_state.veg_fry),
+                    safe_join(st.session_state.veg_biryani),
+                    safe_join(st.session_state.nonveg_biryani),
+                    safe_join(st.session_state.veg_flavored),
+                    safe_join(st.session_state.nonveg_flavored),
+                    safe_join(st.session_state.accomp),
+                    safe_join(st.session_state.desserts),
+                ]
+                st.write("DEBUG:",data)
+                sheet.append_row(data)
+                st.success("✅ Data saved to Google Sheet!")
+                st.session_state.page = 1
+                for s in sections:
+                    st.session_state[s] = []
+            except Exception as e:
+                st.error(f"❌ Error: {e}")
