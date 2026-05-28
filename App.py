@@ -711,7 +711,7 @@ if st.session_state.page == 5:
         if st.button("✅ Submit", key="conform_5"):
             try:
                 sheet = connect_sheet()
-                timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                timestamp = datetime.now().strftime("%Y-%m-%d")
                 def safe_join(lst):
                     try:
                         if not lst:
@@ -744,7 +744,6 @@ if st.session_state.page == 5:
                     safe_join(st.session_state.accomp),
                     safe_join(st.session_state.desserts),
                 ]
-                st.write("DEBUG:",data)
                 sheet.append_row(data)
                 st.success("✅ Data saved to Google Sheet!")
                 st.session_state.page = 1
