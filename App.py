@@ -711,7 +711,7 @@ if st.session_state.page == 5:
         if st.button("✅ Submit", key="conform_5"):
             try:
                 sheet = connect_sheet()
-                timestamp = datetime.now().strftime("%Y-%m-%d")
+                timestamp = datetime.now().strftime("%d-%m-%Y")
                 def safe_join(lst):
                     try:
                         if not lst:
